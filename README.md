@@ -14,7 +14,7 @@ I chose T5 - an architecture pre-trained in a text-to-text framework. Then I fin
 
 ## 1. Preparing a Bilingual Corpus 
 [wiki_lingua](https://huggingface.co/datasets/wiki_lingua) This corpus consists of articles and corresponding summaries from WikiHow. The number of article-summary pairs for English
-are 141,457 and 19,600 for Vietnamese
+are 57945 and 6616 for Vietnamese
 
 Only consider <code>document</code> and <code>summary</code> columns
 
@@ -71,20 +71,8 @@ $ROUGE_{F1 score} = 2\frac{\textrm{precision}.\textrm{recall}}{\textrm{precision
 - The rouge2 measures the overlap between bigrams 
 - rougeL and rougeLsum measure the longest matching sequences of words by looking for the longest common substrings
 - The rougeLsum is computed over a whole summary, while rougeL is computed as the average over individual sentences.
-
-## 4. Baseline
-Using the sentence tokenizer from <code>nltk</code> to extract the first three sentences in an article is often considered a strong baseline
-
-```python
-def three_sentence_summary(text):
-    return "\n".join(sent_tokenize(text)[:3])
-
-def evaluate_baseline(dataset, metric):
-    summaries = [three_sentence_summary(text) for text in dataset["document"]]
-    return metric.compute(predictions=summaries, references=dataset["summary"])
- ```
  
-## 5. Fine-tuning with Accelerate
+## 4. Fine-tuning with Accelerate
 - Iterating over epoch, train the model using mini-batch generated from train_dataloader
 - At the end of each epoch, compute the ROUGE score (generating the tokens -> decoding them (and the reference summaries) into text -> compute score)
 
